@@ -1,0 +1,8 @@
+self.__Nom
+self.__Prenoms
+self.__CodeUser
+self.__Matricule
+self.__CAI
+self.__Sexe
+self.__Telephone
+self.__Email

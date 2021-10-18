@@ -10,10 +10,10 @@ f1 = "fred1.txt"
 f2 = "fred2.txt"
 nom_fic = "fred4.txt"
 
-ch = MyChains(f1, f2)
+ch = MyChains(f1, f2).valeur(1).lower()
 #
 # ch = MyChains(x, y)
-print(ch.concatenate())
+print(ch)
 # ch.generer_fichier(nom_fic)
 # x1=ch.valeur(5)
 # print(x1)

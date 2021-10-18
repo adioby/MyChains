@@ -8,7 +8,7 @@ class MyChain :
                 ch = ""
                 for x0 in x:
                     ch += x0
-                self.__chaines_liste = ch
+                self.__chaines_liste = str(ch)
                 f.close()
             except(IOError):
                 self.__chaines_liste = str(chaines_liste)

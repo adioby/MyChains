@@ -71,27 +71,19 @@ class MyChains:
     def generer_fichier(self,numero_argument, nomfic):
         if (numero_argument==1):
             z = self.__chaines_liste1
-            if nomfic == "":
-                nomfic = "temp.txt"
-            f = open(nomfic, "w")
-            f.write(z)
-            f.close()
-
         elif (numero_argument==2):
             z = self.__chaines_liste2
-            if nomfic == "":
-                nomfic = "temp.txt"
-            f = open(nomfic, "w")
-            f.write(z)
-            f.close()
-
         else:
             z = self.concatenate()
-            if nomfic == "":
-                nomfic = "temp.txt"
+        if nomfic == "":
+            nomfic = "temp.txt"
+
+        try:
             f = open(nomfic, "w")
             f.write(z)
             f.close()
+        except(IOError):
+            print("Nom de fichier invalide ou fichier deja ouvert")
 
 
 def valide_file_name (nomFichier):

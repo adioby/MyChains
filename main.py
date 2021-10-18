@@ -11,7 +11,7 @@ f2 = "fred2.txt"
 nom_fic = "fred3.txt"
 
 ch = MyChains(x, f2)
-ch.generer_fichier(2,nom_fic)
+ch.generer_fichier(3,nom_fic)
 
 #
 # ch = MyChains(x, y)

@@ -1,7 +1,7 @@
-= Nom
-= Prenoms
-= CodeUser
-= Matricule
+self.__Nom= Nom
+self.__Prenoms= Prenoms
+self.__CodeUser= CodeUser
+self.__Matricule= Matricule
 = CAI
 = Sexe
 = Telephone

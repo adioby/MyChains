@@ -1,19 +1,21 @@
 from MyChains import MyChains,MyChain
 
 
-x = "self.__Nom\nself.__Prenoms\nself.__CodeUser\nself.__Matriculate"
+x = "self.__Nom\nself.__Prenoms\nself.__CodeUser\nself.__Matricule"
 # \nself.__CAI\nself.__Sexe\nself.__Telephone\nself" \    ".__Email "
 
 y = "=Nom\n=Prenoms\n=CodeUser\n=Matriculate\n=CAI\n=Sexe\n=Telephone\n=Email"
 
 f1 = "fred1.txt"
 f2 = "fred2.txt"
-nom_fic = "fred4.txt"
+nom_fic = "fred3.txt"
 
-ch = MyChains(f1, f2).valeur(1).lower()
+ch = MyChains(x, f2)
+ch.generer_fichier(2,nom_fic)
+
 #
 # ch = MyChains(x, y)
-print(ch)
+# print(ch)
 # ch.generer_fichier(nom_fic)
 # x1=ch.valeur(5)
 # print(x1)

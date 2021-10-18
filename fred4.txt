@@ -1,8 +1,8 @@
-self.__Nom= Nom
-self.__Prenoms= Prenoms
-self.__CodeUser= CodeUser
-self.__Matricule= Matricule
-self.__CAI= CAI
-self.__Sexe= Sexe
-self.__Telephone= Telephone
-self.__Email= Email
+self.__Nom
+self.__Prenoms
+self.__CodeUser
+self.__Matricule
+self.__CAI
+self.__Sexe
+self.__Telephone
+self.__Emails

@@ -1,0 +1,8 @@
+= Nom
+= Prenoms
+= CodeUser
+= Matricule
+= CAI
+= Sexe
+= Telephone
+= Email

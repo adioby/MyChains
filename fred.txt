@@ -1,2 +1,1176 @@
-ted
-fredy
+
+Stack Overflow
+
+    About
+    Products
+    For Teams
+
+Join Stack Overflow to learn, share knowledge, and build your career.
+
+    Home
+        Public
+
+Questions
+Tags
+Users
+Collectives
+
+    Explore Collectives
+    Find a Job
+    Jobs
+    Companies
+
+    Teams
+    Stack Overflow for Teams – Collaborate and share knowledge with a private group.
+
+pip install fails with "connection error: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:598)"
+Asked 7 years ago
+Active 1 month ago
+Viewed 1.2m times
+520
+257
+
+I am very new to Python and trying to > pip install linkchecker on Windows 7. Some notes:
+
+    pip install is failing no matter the package. For example, > pip install scrapy also results in the SSL error.
+    Vanilla install of Python 3.4.1 included pip 1.5.6. The first thing I tried to do was install linkchecker. Python 2.7 was already installed, it came with ArcGIS. python and pip were not available from the command line until I installed 3.4.1.
+    > pip search linkchecker works. Perhaps that is because pip search does not verify the site's SSL certificate.
+    I am in a company network but we do not go through a proxy to reach the Internet.
+    Each company computer (including mine) has a Trusted Root Certificate Authority that is used for various reasons including enabling monitoring TLS traffic to https://google.com. Not sure if that has anything to do with it.
+
+Here are the contents of my pip.log after running pip install linkchecker:
+
+Downloading/unpacking linkchecker
+  Getting page https://pypi.python.org/simple/linkchecker/
+  Could not fetch URL https://pypi.python.org/simple/linkchecker/: connection error: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:598)
+  Will skip URL https://pypi.python.org/simple/linkchecker/ when looking for download links for linkchecker
+  Getting page https://pypi.python.org/simple/
+  Could not fetch URL https://pypi.python.org/simple/: connection error: HTTPSConnectionPool(host='pypi.python.org', port=443): Max retries exceeded with url: /simple/ (Caused by <class 'http.client.CannotSendRequest'>: Request-sent)
+  Will skip URL https://pypi.python.org/simple/ when looking for download links for linkchecker
+  Cannot fetch index base URL https://pypi.python.org/simple/
+  URLs to search for versions for linkchecker:
+  * https://pypi.python.org/simple/linkchecker/
+  Getting page https://pypi.python.org/simple/linkchecker/
+  Could not fetch URL https://pypi.python.org/simple/linkchecker/: connection error: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:598)
+  Will skip URL https://pypi.python.org/simple/linkchecker/ when looking for download links for linkchecker
+  Could not find any downloads that satisfy the requirement linkchecker
+Cleaning up...
+  Removing temporary dir C:\Users\jcook\AppData\Local\Temp\pip_build_jcook...
+No distributions at all found for linkchecker
+Exception information:
+Traceback (most recent call last):
+  File "C:\Python34\lib\site-packages\pip\basecommand.py", line 122, in main
+    status = self.run(options, args)
+  File "C:\Python34\lib\site-packages\pip\commands\install.py", line 278, in run
+    requirement_set.prepare_files(finder, force_root_egg_info=self.bundle, bundle=self.bundle)
+  File "C:\Python34\lib\site-packages\pip\req.py", line 1177, in prepare_files
+    url = finder.find_requirement(req_to_install, upgrade=self.upgrade)
+  File "C:\Python34\lib\site-packages\pip\index.py", line 277, in find_requirement
+    raise DistributionNotFound('No distributions at all found for %s' % req)
+pip.exceptions.DistributionNotFound: No distributions at all found for linkchecker
+
+python
+windows
+ssl
+pip
+Share
+Improve this question
+Follow
+edited Oct 3 '14 at 15:04
+asked Sep 22 '14 at 19:25
+Jeremy Cook
+18k99 gold badges6666 silver badges7171 bronze badges
+
+    1
+    Quite the opposite! Python 3.4.1 and earlier do not do certificate validation by default. If you were using Python 3.4.2, I would have thought that was the problem. (See issue 21013 and this thread on the mailing list. Note that that is the beginning of a pretty long thread.) Sorry I couldn't actually help! –
+    Cody Piersall
+    Sep 26 '14 at 14:51
+
+    3
+    Check if you have fiddler opened and close it. Fiddler try break SSL and this breaks pip, when I close fiddler pip works for me. When I close my fiddler everything goes ok –
+    José Barbosa
+    Jul 7 '16 at 4:46
+    superuser.com/a/747127/13889 –
+    endolith
+    Aug 9 '16 at 21:27
+    You should reinstall Xcode command line tools that contains Python. stackoverflow.com/a/68247505/4067700 –
+    Victor Kushnerov
+    Jul 5 at 8:41
+
+Add a comment
+49 Answers
+1
+2
+Next
+841
+
+-----> pip install gensim config --global http.sslVerify false
+
+Just install any package with the "config --global http.sslVerify false" statement
+
+You can ignore SSL errors by setting pypi.org and files.pythonhosted.org as trusted hosts.
+
+$ pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org <package_name>
+
+Note: Sometime during April 2018, the Python Package Index was migrated from pypi.python.org to pypi.org. This means "trusted-host" commands using the old domain no longer work.
+Permanent Fix
+
+Since the release of pip 10.0, you should be able to fix this permanently just by upgrading pip itself:
+
+$ pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org pip setuptools
+
+Or by just reinstalling it to get the latest version:
+
+$ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+
+(… and then running get-pip.py with the relevant Python interpreter).
+
+pip install <otherpackage> should just work after this. If not, then you will need to do more, as explained below.
+
+You may want to add the trusted hosts and proxy to your config file.
+
+pip.ini (Windows) or pip.conf (unix)
+
+[global]
+trusted-host = pypi.python.org
+               pypi.org
+               files.pythonhosted.org
+
+Alternate Solutions (Less secure)
+
+Most of the answers could pose a security issue.
+
+Two of the workarounds that help in installing most of the python packages with ease would be:
+
+    Using easy_install: if you are really lazy and don't want to waste much time, use easy_install <package_name>. Note that some packages won't be found or will give small errors.
+    Using Wheel: download the Wheel of the python package and use the pip command pip install wheel_package_name.whl to install the package.
+
+Share
+Improve this answer
+Follow
+edited Sep 6 at 13:46
+CommunityBot
+111 silver badge
+answered Apr 20 '15 at 15:13
+Vaulstein
+16.6k66 gold badges4141 silver badges6262 bronze badges
+
+    7
+    Your update got things going for me. In my case the corporate firewall inserts itself as the trusted host for SSL connections. I assumed proxy setup was wrong but adding verbose showed the issue was SSL. The index-url change worked around the issue. –
+    peater
+    Sep 25 '15 at 18:40
+    14
+    Awesome, thx! The trusted-host seems to be sufficient, ie. pip install --trusted-host pypi.python.org pypi_package. Using --verbose shows that without --trusted-host, the HTTPS connection fails, whereas the same HTTPS connection is attempted (not HTTP) with --trusted-host but it succeeds. –
+    Oliver
+    Dec 22 '15 at 19:18
+
+13
+Isn't using the HTTP version (and then even trusting it) also a security risk? –
+Paŭlo Ebermann
+Jun 24 '16 at 11:47
+3
+you can make it as short to ignore the --index-url parameter ,try this command also should be ok : pip install --trusted-host pypi.python.org  pythonPackage –
+Alter Hu
+Aug 23 '16 at 4:43
+10
+it does not work for me. Running mac os high sierra on a macbookpro 15" Python 2.7 pip 9.0.1 I Tried both: sudo -H pip install --trusted-host pypi.python.org numpy and sudo pip install --trusted-host pypi.python.org numpy it always gives me the same error: "There was a problem confirming the ssl certificate: [SSL: TLSV1_ALERT_PROTOCOL_VERSION] tlsv1 alert protocol version (_ssl.c:661) - skipping Could not find a version that satisfies the requirement" –
+DaniPaniz
+Apr 11 '18 at 18:55
+
+Show 35 more comments
+152
++25
+
+You can specify a cert with this param:
+
+pip --cert /etc/ssl/certs/FOO_Root_CA.pem install linkchecker
+
+See: Docs » Reference Guide » pip
+
+If specifying your company's root cert doesn't work maybe the cURL one will work: http://curl.haxx.se/ca/cacert.pem
+
+You must use a PEM file and not a CRT file. If you have a CRT file you will need to convert the file to PEM There are reports in the comments that this now works with a CRT file but I have not verified.
+
+Also check: SSL Cert Verification.
+Share
+Improve this answer
+Follow
+edited Feb 16 '19 at 14:21
+answered Sep 26 '14 at 14:59
+Steve Tauber
+8,22355 gold badges3939 silver badges4444 bronze badges
+
+    1
+    The Curl one IS secure. I would suggest using that. –
+    Steve Tauber
+    Sep 29 '14 at 10:18
+    1
+    @JeremyCook it could be the time on your server, if it is in the past it could be the verifying process –
+    Giovanni Bitliner
+    Jan 26 '15 at 20:32
+    1
+    CRT format is not supported, only PEM format is. You will need to convert the CRT to PEM format using openssl. You should also verify that the bundle that you've downloaded contains the correct root CA. Please see my answer above for the details: stackoverflow.com/a/28724886/41957. –
+    chnrxn
+    Feb 28 '15 at 14:38
+
+    1
+    @JeremyCook, the PEM/certs did not come directly from the third party that you downloaded them from. They gathered the certs from the original sources. It is not possible for a 3rd party to generate a certificate of someone else unless they have the correct key (which only the someone else will have). –
+    chnrxn
+    Feb 28 '15 at 14:43
+    4
+    @endolith - Looking at pip.pypa.io/en/stable/user_guide/#configuration it looks like you can either use environment variables, or a pip.conf file to have them referenced permanently without specifying on the command –
+    Cinderhaze
+    Apr 24 '18 at 13:30
+
+Show 6 more comments
+95
+
+For me the problem was fixed by creating a folder pip, with a file: pip.ini in C:\Users\<username>\AppData\Roaming\ e.g:
+
+C:\Users\<username>\AppData\Roaming\pip\pip.ini
+
+Inside it I wrote:
+
+[global]
+trusted-host = pypi.python.org
+               pypi.org
+               files.pythonhosted.org
+
+I restarted python, and then pip permanently trusted these sites, and used them to download packages from.
+
+If you can't find the AppData Folder on windows, write %appdata% in file explorer and it should appear.
+Share
+Improve this answer
+Follow
+edited Nov 1 '19 at 12:51
+answered Aug 24 '18 at 14:24
+user2673238
+2,2881717 silver badges2222 bronze badges
+
+    Strangely this is not helping on my Win10 machine :/ –
+    mcandre
+    Jan 14 '19 at 4:46
+    1
+    At work, Windows 10 environment, using Cmder console emulator. --trusted-host used to resolve the "'SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self signed certificate in certificate chain" issue. Today it stopped working. I placed a copy of my pip folder (taken from ../AppData/Local/ ) in ../AppData/Roaming/ and all is right with my local python world again. Thanks much! –
+    IdusOrtus
+    May 3 '19 at 16:00
+    1
+    Great! Thank you very much. --trusted-host doesn't work for me now, but your solution helps. –
+    Alexander Prokofyev
+    Sep 13 '19 at 12:05
+    2
+    Why wasn't this downloaded when installing Python> –
+    LearningDev.
+    Oct 30 '19 at 18:11
+    Awesome! I was searching for errors related with GIT, company's proxy, SSL and it just was pip related. Thank you and I hope this comment bring here people confused like me. –
+    negas
+    Dec 27 '19 at 15:20
+
+Show 1 more comment
+70
+
+kenorb’s answer is very useful (and great!).
+Among his solutions, maybe this is the most simple one: --trusted-host
+
+For example, in this case you can do
+
+pip install --trusted-host pypi.python.org linkchecker
+
+The pem file(or anything else) is unnecessary.
+Share
+Improve this answer
+Follow
+edited May 23 '17 at 12:02
+CommunityBot
+111 silver badge
+answered Oct 24 '16 at 7:50
+plhn
+4,26144 gold badges3434 silver badges4545 bronze badges
+
+    This also works for other commands such as pip list --trusted-host pypi.python.org --outdated –
+    Igor
+    Aug 17 '17 at 15:50
+
+Add a comment
+50
+
+The answers are quite similar and a bit confusing. In my case, the certificates in my company's network was the issue. I was able to work around the problem using:
+
+pip install --trusted-host files.pythonhosted.org --trusted-host pypi.org --trusted-host pypi.python.org oauthlib -vvv
+
+As seen here. The -vvv argument can be omited if verbose output is not required
+Share
+Improve this answer
+Follow
+answered May 7 '18 at 21:39
+Koji D'infinte
+1,16599 silver badges1717 bronze badges
+
+    Works because today I am behind some proxy that strips out normal SSL. I don't normally need to specify trusted hosts when grown ups run the network. –
+    MrChrister
+    Dec 10 '19 at 21:05
+
+Add a comment
+41
+
+Permanent Fix
+
+pip install --upgrade pip --trusted-host pypi.org --trusted-host files.pythonhosted.org
+
+For eg:
+
+pip install <package name> --trusted-host pypi.org --trusted-host files.pythonhosted.org
+
+Share
+Improve this answer
+Follow
+answered May 6 '19 at 17:17
+Devesh Sharma
+80799 silver badges1414 bronze badges
+
+    Do not try this solution, it uninstall pip and even made I unable to reinstall pip –
+    Weilory
+    Oct 18 '20 at 22:35
+
+Add a comment
+31
+
+I tried majority of the solutions provided in this answer blog, however none of them worked, I had this ssl certificant error as I try to install python packages.
+
+I succeed by following command:
+
+python -m pip install PACKAGENAME --trusted-host=pypi.python.org --trusted-host=pypi.org --trusted-host=files.pythonhosted.org
+
+Share
+Improve this answer
+Follow
+answered Oct 18 '20 at 23:16
+Weilory
+1,26588 silver badges1818 bronze badges
+
+    1
+    you are a God/dess –
+    Karim Kardous
+    Dec 31 '20 at 23:05
+    After lot of searching finally this did it. Turns out if you are on corporate network they sometimes mess with your SSL or certificates or could be something to do with firewall / proxy. Try with mobile hotspot or something if you have wi-fi adapter which also works for me. –
+    Canute S
+    Aug 19 at 17:31
+
+Add a comment
+26
+
+The most straightforward way I've found, is to download and use the "DigiCert High Assurance EV Root CA" from DigiCert at https://www.digicert.com/digicert-root-certificates.htm#roots
+
+You can visit https://pypi.python.org/ to verify the cert issuer by clicking on the lock icon in the address bar, or increase your geek cred by using openssl:
+
+$ openssl s_client -connect pypi.python.org:443
+CONNECTED(00000003)
+depth=1 /C=US/O=DigiCert Inc/OU=www.digicert.com/CN=DigiCert SHA2 Extended Validation Server CA
+verify error:num=20:unable to get local issuer certificate
+verify return:0
+---
+Certificate chain
+ 0 s:/businessCategory=Private Organization/1.3.6.1.4.1.311.60.2.1.3=US/1.3.6.1.4.1.311.60.2.1.2=Delaware/serialNumber=3359300/street=16 Allen Rd/postalCode=03894-4801/C=US/ST=NH/L=Wolfeboro,/O=Python Software Foundation/CN=www.python.org
+   i:/C=US/O=DigiCert Inc/OU=www.digicert.com/CN=DigiCert SHA2 Extended Validation Server CA
+ 1 s:/C=US/O=DigiCert Inc/OU=www.digicert.com/CN=DigiCert SHA2 Extended Validation Server CA
+   i:/C=US/O=DigiCert Inc/OU=www.digicert.com/CN=DigiCert High Assurance EV Root CA
+
+The last CN value in the certificate chain is the name of the CA that you need to download.
+
+For a one-off effort, do the following:
+
+    Download the CRT from DigiCert
+    Convert the CRT to PEM format
+    Export the PIP_CERT environment variable to the path of the PEM file
+
+(the last line assumes you are using the bash shell) before running pip.
+
+curl -sO http://cacerts.digicert.com/DigiCertHighAssuranceEVRootCA.crt
+openssl x509 -inform DES -in DigiCertHighAssuranceEVRootCA.crt -out DigiCertHighAssuranceEVRootCA.pem -text
+export PIP_CERT=`pwd`/DigiCertHighAssuranceEVRootCA.pem
+
+To make this re-usable, put DigiCertHighAssuranceEVRootCA.crt somewhere common and export PIP_CERT accordingly in your ~/.bashrc.
+Share
+Improve this answer
+Follow
+edited Feb 28 '15 at 14:04
+answered Feb 25 '15 at 16:53
+chnrxn
+1,21111 gold badge1515 silver badges1414 bronze badges
+
+    4
+    Used your answer to export our company's root CA to the PIP_CERT variable and finally after trying everything else including 'pip --cert cert.pem' your way worked...just pip install package. BIG +1 - yeah we have a firewal/proxy/utm. –
+    Marlon
+    Mar 22 '16 at 17:58
+
+    This still failed for me on Mac Mojave. I followed exactly the 3 steps and still I get "Error: pip is configured with locations that require TLS/SSL, however the ssl module in Python is not available". I tried all the --trusted-host and --cert options and pip will not work. I tried to upgrade pip and got the SSL error. I installed pip from scratch with curl and still I get the error when I run pip. Time to ditch pip and stick to conda :( –
+    user1255933
+    Mar 31 '20 at 21:57
+
+Add a comment
+26
+
+To solve this problem once and for all, you can verify that you have a pip.conf file.
+
+This is where your pip.conf should be, according to the documentation:
+
+    On Unix the default configuration file is: $HOME/.config/pip/pip.conf which respects the XDG_CONFIG_HOME environment variable.
+
+    On macOS the configuration file is $HOME/Library/Application Support/pip/pip.conf if directory $HOME/Library/Application Support/pip exists else $HOME/.config/pip/pip.conf
+
+    On Windows the configuration file is %APPDATA%\pip\pip.ini.
+
+Inside a virtualenv:
+
+    On Unix and macOS the file is $VIRTUAL_ENV/pip.conf
+
+    On Windows the file is: %VIRTUAL_ENV%\pip.ini
+
+Your pip.conf should look like:
+
+[global]
+trusted-host = pypi.python.org
+
+pip install linkchecker installed linkchecker without complains after I created the pip.conf file.
+Share
+Improve this answer
+Follow
+edited Jun 20 '20 at 9:12
+CommunityBot
+111 silver badge
+answered Sep 25 '17 at 17:23
+Alex Fortin
+1,57111 gold badge1616 silver badges2525 bronze badges
+
+    1
+    $HOME/Library/Application Support/pip doesn't exist on my machine, is there an alternative location? –
+    42shadow42
+    Oct 1 '18 at 19:31
+    Looks like the pip user-guide has been updated since when I posted this answer. I updated my answer for macOS. Does it help? –
+    Alex Fortin
+    Oct 2 '18 at 0:43
+    Does not affect the SSL error on my Win10 machine :/ –
+    mcandre
+    Jan 14 '19 at 4:45
+    Does not fix the problem on MacOSX. –
+    MoDJ
+    Jul 1 '19 at 15:37
+    I am on macOS. If you installed python3 using brew then make sure you are using pip3 and create the pip.confas $HOME/.config/pip/pip.conf. I worked for me. –
+    anu
+    Sep 26 '19 at 13:41
+
+Add a comment
+26
+
+You've the following possibilities to solve issue with CERTIFICATE_VERIFY_FAILED:
+
+    Use HTTP instead of HTTPS (e.g. --index-url=http://pypi.python.org/simple/).
+
+    Use --cert <trusted.pem> or CA_BUNDLE variable to specify alternative CA bundle.
+
+    E.g. you can go to failing URL from web-browser and import root certificate into your system.
+
+    Run python -c "import ssl; print(ssl.get_default_verify_paths())" to check the current one (validate if exists).
+    OpenSSL has a pair of environments (SSL_CERT_DIR, SSL_CERT_FILE) which can be used to specify different certificate databasePEP-476.
+    Use --trusted-host <hostname> to mark the host as trusted.
+    In Python use verify=False for requests.get (see: SSL Cert Verification).
+    Use --proxy <proxy> to avoid certificate checks.
+
+Read more at: TLS/SSL wrapper for socket objects - Verifying certificates.
+Share
+Improve this answer
+Follow
+edited Jan 28 '20 at 10:01
+answered Aug 24 '16 at 13:30
+kenorb
+126k6969 gold badges607607 silver badges643643 bronze badges
+
+    From your first point, how do I specify HTTP with the pip command? –
+    rayzinnz
+    Jan 28 '20 at 0:26
+    1
+    @rayzinnz I've added the example. –
+    kenorb
+    Jan 28 '20 at 10:01
+
+Add a comment
+21
+Netscope related SSL issue on Windows 10 with Python 3.9
+
+I had ssl issues due to company network security related to netscope. My machine is windows 10 with python 3.9 and the following command worked for me.
+
+pip config set global.trusted-host "pypi.org files.pythonhosted.org pypi.python.org" --trusted-host=pypi.python.org --trusted-host=pypi.org --trusted-host=files.pythonhosted.org
+
+Here, pip permanently trusted these sites, and now we can use them to download any packages.
+Share
+Improve this answer
+Follow
+edited Sep 8 at 16:00
+answered Jun 1 at 22:42
+nirojshrestha019
+36333 silver badges1111 bronze badges
+
+    Thank you SO MUCH –
+    JackLametta
+    Jun 7 at 13:30
+    You saved my life. I also suspect NetSkope is the culprit. –
+    AmourK
+    Aug 24 at 17:19
+
+Add a comment
+17
+Set Time and Date correct!
+
+For me, it came out that my date and time was misconfigured on Raspberry Pi. The result was that all SSL and HTTPS connections failed, using the https://files.pythonhosted.org/ server.
+Update it like this:
+
+sudo date -s "Wed Thu  23 11:12:00 GMT+1 2018"
+sudo dpkg-reconfigure tzdata
+
+Or directly with e.g. Google's time:
+
+Ref.: https://superuser.com/a/635024/935136
+
+sudo date -s "$(curl -s --head http://google.com | grep ^Date: | sed 's/Date: //g')"
+sudo dpkg-reconfigure tzdata
+
+Share
+Improve this answer
+Follow
+edited Jun 10 '19 at 9:04
+answered Aug 23 '18 at 9:30
+Thomas Devoogdt
+7281010 silver badges1414 bronze badges
+
+    Been driving me crazy for hours -- thanks for that. The PI time was off by 10-days for me causing (it would appear) all kinds of errors during pip install. –
+    SteveJ
+    Oct 24 '18 at 0:32
+
+Add a comment
+14
+
+I recently ran into this problem because of my company's web content filter that uses its own Certificate Authority so that it can filter SSL traffic. PIP doesn't seem to be using the system's CA certificates in my case, producing the error you mention. Downgrading PIP to version 1.2.1 presented its own set of problems later on, so I went back to the original version that came with Python 3.4.
+
+My workaround is quite simple: use easy_install. Either it doesn't check the certs (like the old PIP version), or it knows to use the system certs because it works every time for me and I can still use PIP to uninstall packages installed with easy_install.
+
+If that doesn't work and you can get access to a network or computer that doesn't have the issue, you could always setup your own personal PyPI server: how to create local own pypi repository index without mirror?
+
+I almost did that until I tried using easy_install as a last ditch effort.
+Share
+Improve this answer
+Follow
+edited May 23 '17 at 12:18
+CommunityBot
+111 silver badge
+answered Dec 23 '14 at 15:17
+Ross Peoples
+87311 gold badge1212 silver badges2020 bronze badges
+
+    Same issue here. Another workaround is to export the company's root cert as a file and tell pip to use it with --cert MyCompanyRootCA.crt. –
+    glibdud
+    Apr 30 '18 at 18:29
+
+Add a comment
+12
+
+You can try to bypass the SSL error by using http instead of https. Of course this is not optimal in terms of security, but if you are in a hurry it should do the trick:
+
+pip install --index-url=http://pypi.python.org/simple/ linkchecker
+
+Share
+Improve this answer
+Follow
+answered Oct 3 '14 at 13:01
+Augusto Destrero
+3,3851717 silver badges2222 bronze badges
+
+    1
+    I was expecting your suggestion to work. Crazily I got the exact same errors including the first one Could not fetch URL http://pypi.python.org/simple/linkchecker/: connection error: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:598) –
+    Jeremy Cook
+    Oct 3 '14 at 15:00
+    3
+    Ok, so another workaround is downloading the tar.gz package available here pypi.python.org/pypi/LinkChecker/9.3 and the installing it with: pip install LinkChecker-9.3.tar.gz –
+    Augusto Destrero
+    Oct 3 '14 at 15:35
+
+3
+But if the package you want to install has dependencies you have to download and install also all dependencies, if they are many this could become a nightmare. –
+Augusto Destrero
+Oct 3 '14 at 15:37
+1
+For me, i had to download the whl (for my case pyserial) and install it. This picked up the dependencies that were not collected by the tar.gz... So, maybe whl is another option along the lines of @baxeico python -m pip install pyserial-3.4-py2.py3-none-any.whl For me none of this worked: 1. --cert cacert.pem 2. exporting company certificate, converting to PEM 3. easy_install in cygwin 4. --trusted-host –
+charo
+Jan 8 '19 at 20:04
+2
+The now longs works as of 2017 -- HTTP access has been completely cut off. mail.python.org/pipermail/distutils-sig/2017-October/… –
+gbtimmon
+Jan 25 '19 at 21:21
+
+Show 5 more comments
+12
+
+TLDR:
+
+pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r requirements.txt -vvv
+
+pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org <packageName> -vvv
+
+So, Having 30+ answers to the question already, but nothing was working for me in June 2020 (while in lockdown ).
+all were given in different moments of past. I will try to make this answer work for all times in future. The problem is while pip installs package it tries to connect with host URL where package is stored and doesn't trust the URL while downloading it.
+
+There are two ways we can solve this: Easy and non-secure: 1. check which URL is hit by pip to download the package.
+
+pip install <packageName> -vvv
+
+if you will carefully check the output, you will see it might be going to some URL like pypi.org or may be pypi.python.org.
+
+if it is, just add trusted host option to the command like below:
+
+pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org <packageName> -vvv
+
+or if you are using requirements file:
+
+pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r requirements.txt -vvv
+
+Secure way:
+
+Go to each of these URL and download their public cert (just google how to download), create a chain, store it as .pem file and run below command:
+
+pip --cert YourPemFile.pem install <packageName>
+
+Share
+Improve this answer
+Follow
+answered Jun 19 '20 at 11:25
+Nitesh chauhan
+19611 silver badge55 bronze badges
+Add a comment
+10
+
+I installed pip 1.2.1 with easy_install and upgraded to latest version of pip (6.0.7 at the time) which is able to install packages in my case.
+
+easy_install pip==1.2.1
+pip install --upgrade pip
+
+Share
+Improve this answer
+Follow
+answered Feb 4 '15 at 14:20
+theofanis
+11911 silver badge33 bronze badges
+
+    thank you, this worked like a charm for me!! –
+    Nidhi Garg
+    Dec 9 '20 at 4:14
+
+Add a comment
+10
+
+The answers to use
+
+pip install --trusted-host pypi.python.org <package>
+
+work. But you'll have to check if there are redirects or caches pip is hitting. On Windows 7 with pip 9.0.1, I had to run
+
+pip install \
+  --trusted-host pypi.python.org \
+  --trusted-host pypi.org \
+  --trusted-host files.pythonhosted.org \
+  <package>
+
+You can find these with the verbose flag.
+Share
+Improve this answer
+Follow
+answered Apr 25 '18 at 19:46
+pmbotter
+37311 gold badge44 silver badges77 bronze badges
+Add a comment
+9
+
+You have 4 options:
+Using a certificate as parameter
+
+$ pip install --cert /path/to/mycertificate.crt linkchecker
+
+Using a certificate in a pip.conf
+
+Create this file:
+
+$HOME/.pip/pip.conf (Linux)
+
+%HOME%\pip\pip.ini (Windows)
+
+and add these lines:
+
+[global]
+cert = /path/to/mycertificate.crt
+
+Ignoring certificate and using HTTP
+
+$ pip install --trusted-host pypi.python.org linkchecker
+
+Ignoring certificate and using HTTP in a pip.conf
+
+Create this file:
+
+$HOME/.pip/pip.conf (Linux)
+
+%HOME%\pip\pip.ini (Windows)
+
+and add these lines:
+
+[global]
+trusted-host = pypi.python.org
+
+Source
+
+    https://pip.pypa.io/en/latest/user_guide/#configuration
+
+Share
+Improve this answer
+Follow
+edited Aug 12 '18 at 12:46
+slm
+13.2k1212 gold badges9090 silver badges111111 bronze badges
+answered Apr 20 '18 at 15:44
+Thiago Falcao
+3,4653434 silver badges3030 bronze badges
+Add a comment
+8
+
+First of all,
+
+    pip install --trusted-host pypi.python.org <package name>
+
+did not work for me. I kept getting the CERTIFICATE_VERIFY_FAILED error. However, I noticed in the error messages that they referenced the 'pypi.org' site. So, I used this as the trusted host name instead of pypi.python.org. That almost got me there; the load was still failing with CERTIFICATE_VERIFY_FAILED, but at a later point. Finding the reference to the website that was failing, I included it as a trusted host. What eventually worked for me was:
+
+    pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org <package name>
+
+Share
+Improve this answer
+Follow
+answered Apr 23 '18 at 16:50
+Pat B.
+31922 silver badges1111 bronze badges
+
+    Only your answer worked for me. Any idea how to specify the trusted host configuration in VS Code? –
+    FMFF
+    Sep 7 '20 at 4:34
+
+Add a comment
+6
+
+Had the same problem trying pip install ftputil with ActivePython 2.7.8, ActivePython 3.4.1, and "stock" Python 3.4.2 on 64-bit Windows 7 Enterprise. All attempts failed with the same errors as OP.
+
+Worked around the problem for Python 3.4.2 by downgrading to pip 1.2.1: easy_install pip==1.2.1 (see https://stackoverflow.com/a/16370731/234235). Same fix also worked for ActivePython 2.7.8.
+
+The bug, reported in March 2013, is still open: https://github.com/pypa/pip/issues/829.
+Share
+Improve this answer
+Follow
+edited May 23 '17 at 12:34
+CommunityBot
+111 silver badge
+answered Oct 14 '14 at 23:24
+psteiner
+18733 silver badges1717 bronze badges
+
+    This worked for me as well. While it might seem like a bad idea in the first place to downgrade to an older version of pip, I was dealing with old django packages so the old pip version was actually matching with the other packages. –
+    mknaf
+    Jun 2 '15 at 15:20
+    Issue 829 is now closed. –
+    Ortomala Lokni
+    Dec 15 '15 at 13:48
+
+Add a comment
+5
+
+Nothing on this page worked for me until I used the --verbose option to see that it wanted to get to files.pythonhosted.org rather than pypi.python.org:
+
+pip install --trusted-host files.pythonhosted.org <package_name>
+
+So check the URL that it's actually failing on via the --verbose option.
+Share
+Improve this answer
+Follow
+answered Apr 19 '18 at 0:18
+Dan Austin
+7911 silver badge44 bronze badges
+Add a comment
+5
+
+I'm not sure if this is related, but I had a similar problem which was fixed by copying these files from Anaconda3/Library/bin to Anaconda3/DLLs :
+
+libcrypto-1_1-x64.dll
+
+libssl-1_1-x64.dll
+Share
+Improve this answer
+Follow
+answered May 12 '19 at 20:25
+ColdCold
+3,79122 gold badges2323 silver badges2020 bronze badges
+
+    With Anaconda 2019.03 I have copied the following files from <Anaconda3 folder>/Library/bin to <Anaconda3>/DLLs libcrypto-1_1-x64.dll libcrypto-1_1-x64.pdb libssh2.dll libssl-1_1-x64.dll libssl-1_1-x64.pdb Then I add a ConnectTimeout error, so updated proxy configuration .condarc –
+    MordicusEtCubitus
+    Jul 15 '19 at 12:38
+
+    Works. Man you're GENIUS! I've been roaming the forums for 1.5 hour, just to find this underestimated and simple solution. –
+    ivan866
+    Mar 6 '20 at 14:46
+
+Add a comment
+5
+Don't Skip! Found Safe Solution for Linux
+
+All the solutions of adding pypi.org to trusted sites with --trusted-host is not safe, basically skipping https, not really fixing the problem.
+Everyone which uses this approach, please try to update your cert this way and remove --trusted-host flag:
+
+sudo yum -y update ca-certificates
+export PIP_CERT=/etc/ssl/certs/ca-bundle.crt
+
+Safety Matters!
+Share
+Improve this answer
+Follow
+answered Oct 15 '20 at 8:51
+Ofek Hod
+2,4971010 silver badges2222 bronze badges
+
+    3
+    Can you help with an equivalent of this for Mac? –
+    Ankit Khettry
+    Jan 14 at 14:43
+
+Add a comment
+5
+
+I attempted with using the corporate proxy but it failed.
+
+I'm using Python 3.6.
+
+pip.conf file was missing.
+
+Here are the steps to solve the issue:
+
+    Install certificate package: -pip --trusted-host pypi.python.org --trusted-host files.pythonhosted.org --trusted-host pypi.org install certifi
+
+    Create a pip.conf file, as so:
+
+     $ cd ~/.config
+     $ mkdir pip
+     $ cd pip
+     $ nano pip.conf
+
+Add the following to the newly created .conf file, and save it.
+
+[global]
+trusted-host = pypi.python.org files.pythonhosted.org pypi.org pypi.io
+
+All done and it started working.
+Share
+Improve this answer
+Follow
+edited May 18 at 9:43
+Ian
+2,67022 gold badges1818 silver badges4747 bronze badges
+answered Feb 12 at 5:22
+Shabir
+8711 silver badge77 bronze badges
+
+    I had to figure out a few things to do this on Win10 but this answer got me to the solution when none of the others could. Thanks a ton! –
+    raddevus
+    Sep 20 at 20:34
+
+Add a comment
+4
+
+Short Solution:
+
+easy_install <package name>
+
+For Example:
+
+easy_install pandas
+
+Alternate solution:
+
+pip install <package_name> --trusted-host pypi.org --trusted-host files.pythonhosted.org
+
+Example:
+
+pip install pandas --trusted-host pypi.org --trusted-host files.pythonhosted.org
+
+Share
+Improve this answer
+Follow
+edited Apr 14 '20 at 10:09
+answered Jan 23 '20 at 12:58
+Gil Baggio
+9,71533 gold badges4040 silver badges3232 bronze badges
+Add a comment
+4
+
+Just putting this here as I don't see any other mentioning it.
+
+You can set globally trusted-host to pip like this:
+
+py -m pip config set global.trusted-host pypi.org
+
+and most importantly, it will return the right place where the pip.ini/pip.conf is put
+Share
+Improve this answer
+Follow
+answered Apr 21 at 18:35
+LionH
+14855 bronze badges
+Add a comment
+3
+
+I solved this problem by removing my pip and installing the older version of pip: https://pypi.python.org/pypi/pip/1.2.1
+Share
+Improve this answer
+Follow
+answered Oct 9 '14 at 14:47
+user3080641
+3111 bronze badge
+
+    While this link may answer the question, it is better to include the essential parts of the answer here and provide the link for reference. Link-only answers can become invalid if the linked page changes. - From Review –
+    apomene
+    Aug 26 '16 at 7:57
+    @apomene how is OP supposed to include the essential parts of the answer here since it's a link to a binary file...? –
+    Thomas Ayoub
+    Aug 26 '16 at 9:33
+    @ThomasAyoub, i believe you already know, that the above message is auto filled from SO, when flagging an answer as only link answer –
+    apomene
+    Aug 26 '16 at 9:41
+    @apomene that doesn't answer my question, I still don't see what OP could/should add? –
+    Thomas Ayoub
+    Aug 26 '16 at 9:44
+    1
+    @ThomasAyoub, To elaborate further, my comment (SO) indicates that question is short and link only, meaning it could better be a comment. My intention was not to explicitly state that OP should add details regrading the link, but details on why this answers the question. –
+    apomene
+    Aug 26 '16 at 9:49
+
+Add a comment
+3
+
+Recently I faced the same issue in python 3.6 with visual studio 2015. After spending 2 days, I got the solution and its working fine for me.
+
+I got below error while try to install numpy using pip or from visual studio Collecting numpy Could not fetch URL https://pypi.python.org/simple/numpy/: There was a problem confirming the ssl certificate: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:748) - skipping Could not find a version that satisfies the requirement numpy (from versions: ) No matching distribution found for numpy
+
+Resolution :
+
+For Windows OS
+
+    open -> "%appdata%" Create "pip" folder if not exists.
+    In pip folder create "pip.ini" file.
+    Edit file and write
+    [global]
+    trusted-host = pypi.python.org Save and Close the file. Now install using pip/visual studio it works fine.
+
+Share
+Improve this answer
+Follow
+answered Sep 28 '17 at 10:05
+Ankit Raval
+3122 bronze badges
+Add a comment
+3
+
+One solution (for Windows) is to create a file called pip.ini on the %AppData%\pip\ folder (create the folder if it doesn't exist) and insert the following details:
+
+[global]
+cert = C:/certs/python_root.pem
+proxy = http://my_user@my_company.com:my_password@proxy_ip:proxy_port
+
+...and then we can execute the install instruction:
+
+pip3 install PyQt5
+
+Another option is to install the package using arguments for the proxy and certificate...
+
+$ pip3 install --proxy http://my_user@my_company.com:my_password@proxy_ip:proxy_port \
+   --cert C:/certs/python_root.pem PyQt5
+
+To convert the certificate *.cer files to the required *.pem format execute the following instruction:
+
+$ openssl x509 -inform der -in python_root.cer -out python_root.pem
+
+Hope this helps someone!
+Share
+Improve this answer
+Follow
+edited Aug 12 '18 at 12:47
+slm
+13.2k1212 gold badges9090 silver badges111111 bronze badges
+answered Apr 17 '18 at 10:41
+Marco
+2,19722 gold badges2121 silver badges1515 bronze badges
+
+    1
+    For other OS's, take a look at Alex-Antoine Fortin's answer –
+    Dinei
+    Apr 17 '18 at 17:59
+    Didn't need the proxy, just the cert. I ran; pip3.6 config set global.cert '/<path>/server.crt' –
+    avatarofhope2
+    Oct 16 '18 at 21:05
+
+Add a comment
+2
+
+You can try this to ignore "https":
+
+pip install --index-url=http://pypi.python.org/simple/ --trusted-host pypi.python.org  [your package..]
+
+Share
+Improve this answer
+Follow
+edited Jun 17 '17 at 10:19
+Maarten Bodewes
+82k1313 gold badges127127 silver badges231231 bronze badges
+answered May 17 '17 at 13:57
+Smaillns
+1,59311 gold badge1515 silver badges2222 bronze badges
+
+    1
+    if you even have other problems with pip version you can try this pip install --trusted-host pypi.python.org --upgrade pip – –
+    Smaillns
+    Aug 9 '17 at 4:53
+
+Add a comment
+1
+2
+Next
+Highly active question. Earn 10 reputation (not counting the association bonus) in order to answer this question. The reputation requirement helps protect this question from spam and non-answer activity.
+Not the answer you're looking for? Browse other questions tagged python windows ssl pip or ask your own question.
+
+    The Overflow Blog
+
+Code quality: a concern for businesses, bottom lines, and empathetic programmers
+
+    Podcast 385: Getting your first job off the CSS mailing list
+    Upcoming Events
+    2021 Community Moderator Election
+    ends in 7 days
+    Featured on Meta
+    Updates to Privacy Policy (September 2021)
+    Version labels for answers
+    2021 Community Moderator Election
+
+Linked
+4
+RUN pip install: There was a problem confirming the ssl certificate: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed
+2
+Could not fetch URL https://pypi.python.org/simple/xlrd/
+0
+Virtualenv Installation via pip & conda on Mac
+0
+Cannot use pip to install packages, it reports an error on ssl certificate
+0
+Installing pandas on python 3.6 (64 bit) is getting failed
+1
+SSL errors for all pip commands
+0
+Python SSL error, specifically pertaining to WRONG_VERSION_NUMBER
+680
+How do I update\upgrade pip itself from inside my virtual environment?
+345
+urllib and "SSL: CERTIFICATE_VERIFY_FAILED" Error
+676
+How to get .pem file from .key and .crt files?
+See more linked questions
+Related
+899
+pip install mysql-python fails with EnvironmentError: mysql_config not found
+1
+Python pip install error [SSL: CERTIFICATE_VERIFY_FAILED]
+35
+brew installation of Python 3.6.1: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed
+2
+pip install : issue with the ssl certificate
+7
+SSL: CERTIFICATE_VERIFY_FAILED error from Python pip in Ubuntu 16.0.4
+1
+ssl error why installing with pip
+1
+certificate verify failed using pip install, main problem, (_ssl.c:1108)
+5
+Pip install fails with “connection error" ssl problem
+2
+"SSL: CERTIFICATE_VERIFY_FAILED" error while using PIP
+Hot Network Questions
+
+    Asking a former supervisor if they killed my postdoc application
+    What incentives do reviewers in top conferences have to reject or accept a paper properly?
+    What would cut off a Mars base from Earth's support for an extended period of time?
+    Why is it not recommended to install Windows after Ubuntu for dual-boot?
+    Does a card played with a cascade ability count for "casting" a spell?
+    What actions does a pilot take when simply told to "go around"?
+    Is it a prefix normal word?
+    Wired to the wrong account
+    Do I really need to include wall-switched lighting in every room?
+    How is adding noise to training data equivalent to regularization?
+    source of quote ~"so dumb they couldn't integrate e to the x
+    How to rename multiple files by changing one component of the file name?
+    Is it correct to say "The hem almost came off. Sew the hem back to the skirt"?
+    can a plant or alien plant have fruit and shoot seeds
+    Why is peirazo "tempts" in James 1:13 but "test" in John 6:6?
+    Left Shift/ Right Shift an array in C
+    Story where the president's advisor overseeing an anti-alien program turns out to be an alien himself
+    Is it legal to write a software license if I'm not a licensed attorney?
+    On a long smooth descent, do brakes really heat less with intermittent hard braking compared to dragging?
+    Is US health insurance just a terrible deal overall for a healthy young adult?
+    If our solar system and galaxy are moving why do we not see differences in speed of light depending on direction?
+    Are the HSA and FSA bad deals?
+    Would replacing a damaged tank have prevented the Apollo 13 incident?
+    Is there any reason why /proc/*/cmdline is world-readable?
+
+Question feed
+
+Stack Overflow
+
+    Questions
+    Jobs
+    Developer Jobs Directory
+    Salary Calculator
+    Help
+    Mobile
+    Disable Responsiveness
+
+Products
+
+    Teams
+    Talent
+    Advertising
+    Enterprise
+
+Company
+
+    About
+    Press
+    Work Here
+    Legal
+    Privacy Policy
+    Terms of Service
+    Contact Us
+    Cookie Settings
+    Cookie Policy
+
+Stack Exchange
+Network
+
+    Technology
+    Life / Arts
+    Culture / Recreation
+    Science
+    Other
+
+    Blog
+    Facebook
+    Twitter
+    LinkedIn
+    Instagram
+
+site design / logo © 2021 Stack Exchange Inc; user contributions licensed under cc by-sa. rev 2021.10.18.40487

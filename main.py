@@ -1,17 +1,24 @@
-from MyChains import MyChains,MyChain
+from MyChains import MyChains, MyChain,valide_file
 
-
-x = "self.__Nom\nself.__Prenoms\nself.__CodeUser\nself.__Matricule"
-# \nself.__CAI\nself.__Sexe\nself.__Telephone\nself" \    ".__Email "
-
+x = "self.__Nom\nself.__Prenoms\nself.__CodeUser\nself.__Matricule \nself.__CAI\nself.__Sexe\nself.__Telephone\nself.__Email "
 y = "=Nom\n=Prenoms\n=CodeUser\n=Matriculate\n=CAI\n=Sexe\n=Telephone\n=Email"
 
 f1 = "fred1.txt"
 f2 = "fred2.txt"
 nom_fic = "fred3.txt"
+f4 = "fred1.txt"
+# print(valide_file(f4))
 
-ch = MyChains(x, f2)
-ch.generer_fichier(3,nom_fic)
+print(MyChains("fred1.txt").valeur().lower())
+# ch = MyChains(x, y)
+# print("************************************************")
+
+# ch=MyChains(f1,f2)
+# MyChains(f1," = ").add()
+
+# print((ch))
+# print(len(ch))
+# print(ch.valeur(4))
 
 #
 # ch = MyChains(x, y)
@@ -28,8 +35,6 @@ ch.generer_fichier(3,nom_fic)
 # # ch.generer_fichier(nom_fic)
 # x1=ch.valeur(3)
 # print(x1)
-
-
 
 
 #

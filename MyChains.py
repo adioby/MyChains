@@ -1,4 +1,5 @@
 import os.path
+from datetime import datetime
 
 class MyChain :
     def __init__(self, chaines_liste):
@@ -10,6 +11,7 @@ class MyChain :
                     ch += x0
                 self.__chaines_liste = str(ch)
                 f.close()
+
             except(IOError):
                 self.__chaines_liste = str(chaines_liste)
 
@@ -17,18 +19,23 @@ class MyChain :
         return self.__chaines_liste
 
 class MyChains:
-    def __init__(self, chaines_liste1, chaines_liste2):
+    def __init__(self, chaines_liste1, chaines_liste2=""):
         self.__chaines_liste1 = MyChain(chaines_liste1).valeur()
         self.__chaines_liste2 = MyChain(chaines_liste2).valeur()
+        # self.__chaines_liste3 = self.add()
 
-    def valeur(self,numero_argument):
+    def valeur(self,numero_argument=1):
         if (numero_argument==1):
             return self.__chaines_liste1
 
         elif (numero_argument==2):
             return self.__chaines_liste2
-        else:
+
+        elif (numero_argument==3):
             return self.concatenate()
+
+        else:
+            return self.add()
 
     def concatenate(self):
         chaines1 = str(self.__chaines_liste1).split("\n")
@@ -68,15 +75,48 @@ class MyChains:
 
         return chaine
 
-    def generer_fichier(self,numero_argument, nomfic):
+    def add(self):
+        global chaine
+        chaines1 = str(self.__chaines_liste1).split("\n")
+        chaines2 = str(self.__chaines_liste2)
+
+        chaines2_ = str(self.__chaines_liste2).split("\n")
+
+        n1 = len(chaines1)
+        n2 = len(chaines2_)
+        ch=""
+        chaine = ""
+
+        if (n2>1):
+            for i in range(n1):
+                ch +=" "
+
+        for i in range(n1):
+            x=chaines1[i] + chaines2
+            if chaine == "":
+                chaine = x
+            else:
+                chaine = chaine + "\n"   + x
+
+        return chaine
+
+    def generer_fichier(self, numero_argument=3, nomfic=""):
         if (numero_argument==1):
             z = self.__chaines_liste1
         elif (numero_argument==2):
             z = self.__chaines_liste2
-        else:
+        elif (numero_argument==3):
             z = self.concatenate()
+        else:
+            z = self.add()
+
         if nomfic == "":
-            nomfic = "temp.txt"
+            today = str(datetime.now())
+            today=today.replace("/","")
+            today = today.replace(":", "")
+            today = today.replace(".", "")
+
+            nomfic = "temp_" + today +".txt"
 
         try:
             f = open(nomfic, "w")
@@ -86,13 +126,13 @@ class MyChains:
             print("Nom de fichier invalide ou fichier deja ouvert")
 
 
-def valide_file_name (nomFichier):
+
+def valide_file (nomFichier):
     try:
-        if os.path.isfile(str(nomFichier)) and str(nomFichier).lower()[-4] == ".txt":
+        if os.path.isfile(str(nomFichier)) and str(nomFichier).lower()[-4:] == ".txt":
             return True
         else:
             return False
 
     except (FileExistsError):
         return False
-

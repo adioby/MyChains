@@ -1,4 +1,4 @@
-from MyChains import MyChains, MyChain,valide_file
+from MyChains import MyChains, MyChain, valide_file
 
 x = "self.__Nom\nself.__Prenoms\nself.__CodeUser\nself.__Matricule \nself.__CAI\nself.__Sexe\nself.__Telephone\nself.__Email "
 y = "=Nom\n=Prenoms\n=CodeUser\n=Matriculate\n=CAI\n=Sexe\n=Telephone\n=Email"
@@ -6,18 +6,20 @@ y = "=Nom\n=Prenoms\n=CodeUser\n=Matriculate\n=CAI\n=Sexe\n=Telephone\n=Email"
 f1 = "fred1.txt"
 f2 = "fred2.txt"
 nom_fic = "fred3.txt"
-f4 = "fred1.txt"
+f4 = "MyChains.py"
 # print(valide_file(f4))
 
-print(MyChains("fred1.txt").valeur().lower())
-# ch = MyChains(x, y)
+# print(MyChains("MyChains.py").valeur().lower())
+ch = MyChains(x, y)
 # print("************************************************")
-
+#
 # ch=MyChains(f1,f2)
+# print((ch.value().upper()))
+# print(len(ch))
+
 # MyChains(f1," = ").add()
 
-# print((ch))
-# print(len(ch))
+
 # print(ch.valeur(4))
 
 #
@@ -51,3 +53,23 @@ print(MyChains("fred1.txt").valeur().lower())
 #
 # print(fichier1)
 # print(ch)
+
+# thisdict =	{
+#   "brand": "Ford",
+#   "model": "Mustang",
+#   "year": 1964
+# }
+# print(thisdict.get("year"))
+
+# set1 = {"apple", "banana", "cherry"}
+# set2 = {3, 5, 7, 9, 3}
+# set3 = {True, False, False}
+# ch=str(set1)
+# print(ch)
+#
+# set1.remove("banana")
+# ch=str(set1)
+# print(ch)
+
+xx = MyChains("fred1.txt").create_str()
+print(xx)

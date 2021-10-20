@@ -1,4 +1,4 @@
-from MyChains import MyChains, MyChain, valide_file
+from myChains import myChains, myChain, valide_file
 
 x = "self.__Nom\nself.__Prenoms\nself.__CodeUser\nself.__Matricule \nself.__CAI\nself.__Sexe\nself.__Telephone\nself.__Email "
 y = "=Nom\n=Prenoms\n=CodeUser\n=Matriculate\n=CAI\n=Sexe\n=Telephone\n=Email"
@@ -10,7 +10,7 @@ f4 = "MyChains.py"
 # print(valide_file(f4))
 
 # print(MyChains("MyChains.py").valeur().lower())
-ch = MyChains(x, y)
+ch = myChains(x, y)
 # print("************************************************")
 #
 # ch=MyChains(f1,f2)
@@ -71,5 +71,5 @@ ch = MyChains(x, y)
 # ch=str(set1)
 # print(ch)
 
-xx = MyChains("fred1.txt").create_str()
+xx = myChains("fred1.txt").create_str()
 print(xx)

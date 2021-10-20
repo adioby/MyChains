@@ -2,7 +2,7 @@ import os.path
 from datetime import datetime
 
 
-class MyChain:
+class myChain:
     def __init__(self, chaines):
         try:
             f = open(str(chaines).lower(), "r")
@@ -20,10 +20,10 @@ class MyChain:
         return self.__chaines
 
 
-class MyChains:
+class myChains:
     def __init__(self, chaines1, chaines2=""):
-        self.__chaines1 = MyChain(chaines1).valeur()
-        self.__chaines2 = MyChain(chaines2).valeur()
+        self.__chaines1 = myChain(chaines1).valeur()
+        self.__chaines2 = myChain(chaines2).valeur()
         # self.__chaines3 = self.add()
 
     def value(self, numero_argument=1):

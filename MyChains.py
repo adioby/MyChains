@@ -1,23 +1,22 @@
 import os.path
 from datetime import datetime
 
-
 class myChain:
-    def __init__(self, chaines):
+    def __init__(self, chaine):
         try:
-            f = open(str(chaines).lower(), "r")
+            f = open(str(chaine).lower(), "r")
             x = f.readlines()
             ch = ""
             for x0 in x:
                 ch += x0
-            self.__chaines = str(ch)
+            self.__chaine = str(ch)
             f.close()
 
-        except(IOError):
-            self.__chaines = str(chaines)
+        except (IOError):
+            self.__chaine = str(chaine)
 
     def valeur(self):
-        return self.__chaines
+        return self.__chaine
 
 
 class myChains:
@@ -149,6 +148,23 @@ class myChains:
 
         return chain
 
+
+    def find(self):
+        chain1 = str(self.__chaines1).split("\n")
+        chain2 = str(self.__chaines2)
+
+        n1 = len(chain1)
+        chain = ""
+
+        for x in chain1:
+            ok = chain2 in x
+            if ok:
+                if chain == "":
+                    chain = x
+                else:
+                    chain = chain + "\n" + x
+        return chain
+
     def create_file(self, numero_argument=3, nomfic=""):
         if numero_argument == 1:
             z = self.__chaines1
@@ -178,7 +194,12 @@ class myChains:
 
 def valide_file(nomFichier):
     try:
-        if os.path.isfile(str(nomFichier)) and str(nomFichier).lower()[-4:] == ".txt":
+        ext=["txt","py","csv","ini","log"]
+
+        # ext_ok = str(nomFichier).lower().split(".")[-1] in ext #Text files only
+        ext_ok = True
+
+        if os.path.isfile(str(nomFichier)) and ext_ok:
             return True
         else:
             return False

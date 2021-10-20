@@ -1,17 +1,15 @@
-class example:
+from myChains import myChains, myChain, valide_file
 
-    def __init__(self):
-        print("One")
+x = "self.__Nom\nself.__Prenoms\nself.__CodeUser\nself.__Matricule \nself.__CAI\nself.__Sexe\nself.__Telephone\nself.__Email "
+y = "=Nom\n=Prenoms\n=CodeUser\n=Matriculate\n=CAI\n=Sexe\n=Telephone\n=Email"
 
-    def __init__(self):
-        print("Two")
+f1 = "fred1.txt"
+f2 = "fred2.txt"
+nom_fic = "fred3.txt"
+f4 = "myChains.py"
+f5="C:\Temp\jde_log\ACS.splf-331176694244807445.txt"
+f6="C:\Temp\jde_log\ACS.splf-3204451050875517401.txt"
+search="Total size :"
 
-    def __init__(self):
-        print("Three")
-
-
-    def __init__(self):
-        print("Four")
-
-
-e = example()
+ch=myChains(f6,search)
+print(ch.find())

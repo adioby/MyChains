@@ -1,4 +1,4 @@
-from myChains import myChains, myChain, valide_file,listeToString
+from myChains import myChains, myChain, valide_file,listeToString,stringToList
 
 x = "self.__Nom\nself.__Prenoms\nself.__CodeUser\nself.__Matricule \nself.__CAI\nself.__Sexe\nself.__Telephone\nself.__Email "
 y = "om\nPrenom" #"\n=CodeUser\n=Matriculate\n=CAI\n=Sexe\n=Telephone\n=Email"
@@ -11,6 +11,16 @@ nom_fic = "fred3.txt"
 # f5="C:\Temp\jde_log\ACS.splf-331176694244807445.txt"
 # f6="C:\Temp\jde_log\ACS.splf-3204451050875517401.txt"
 # search="Total size :"
+#
+# ch=myChains(x,listeToString(z)).find()
+# print(ch)
 
-ch=myChains(x,listeToString(z)).find()
-print(ch)
+# Python code to convert string to list character-wise
+def Convert(string):
+    list1=[]
+    list1[:0]=string
+    return list1
+# Driver code
+str1="ADIOBY, alfred"
+ch=myChains(str1)
+print(ch.toList())

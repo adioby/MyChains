@@ -1,8 +1,34 @@
-self.__Nom= Nom
-self.__Prenoms= Prenoms
-self.__CodeUser= CodeUser
-self.__Matricule= Matricule
-= CAI
-= Sexe
-= Telephone
-= Email
+def Descendre_Code(Chaine_Code, Caractere_Separation):
+
+ch = Chaine_Code
+x0 = Caractere_Separation
+if InStr(1, ch, x0) = 0 :
+    Descendre_Code = ch
+    
+
+T = Split(ch, x0)
+n = UBound(T)
+
+ch = ""
+
+For i = 0 To n
+    X = Trim(T(i))
+    if i < n :
+        if i = 0 :
+            ch = Descendre_Ouverture_Fermeture(X) + " " + x0 + "\n"
+        else:
+            'verifier si le dernier caractere est identique au separateur si oui pas de retour a la ligne
+            if (i = n - 1) And (Right(Chaine_Code, Len(Caractere_Separation)) = Caractere_Separation) :
+                ch = ch + X + " " + x0
+            else:
+                ch = ch + X + " " + x0 + "\n"
+            
+        
+    else:
+        if X <> "" :
+            ch = ch + " " + Descendre_Ouverture_Fermeture(X)
+        
+    
+
+return ch
+

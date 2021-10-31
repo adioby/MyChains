@@ -1,7 +1,6 @@
 import os.path
 from datetime import datetime
 
-
 class myChain:
     def __init__(self, chaine):
         try:
@@ -148,7 +147,7 @@ class myChains:
 
         return chain
 
-    def find(self, andCondition=False,caseSensitive=False):
+    def find(self, andCondition=False, caseSensitive=False):
         chain1 = str(self.__chaines1).split("\n")
         chain2 = str(self.__chaines2)
 
@@ -158,7 +157,7 @@ class myChains:
         # listInString
         for x in chain1:
             # ok = chain2 in x
-            ok = listInString(chain2, x,andCondition,caseSensitive)
+            ok = listInString(chain2, x, andCondition, caseSensitive)
             if ok:
                 if chain == "":
                     chain = x
@@ -196,6 +195,7 @@ class myChains:
     def toList(self):
         return stringToList(self.__chaines1, self.__chaines2)
 
+
 def valide_file(nomFichier):
     try:
         ext = ["txt", "py", "csv", "ini", "log"]
@@ -211,13 +211,14 @@ def valide_file(nomFichier):
     except FileExistsError:
         return False
 
-def listInString(str_List, chaine, andCondition=False,caseSensitive=False):
+
+def listInString(str_List, chaine, andCondition=False, caseSensitive=False):
     if not caseSensitive:
-        list_search=str_List.lower().split("\n")
-        ch=chaine.lower()
+        list_search = str_List.lower().split("\n")
+        ch = chaine.lower()
     else:
         list_search = str_List.split("\n")
-        ch=chaine
+        ch = chaine
 
     if not andCondition:
         for x in list_search:
@@ -234,23 +235,25 @@ def listInString(str_List, chaine, andCondition=False,caseSensitive=False):
         else:
             return False
 
+
 def listeToString(liste):
-    typ=type(liste)
-    if typ==list:
-        ch=""
+    typ = type(liste)
+    if typ == list:
+        ch = ""
         for x in liste:
-            if ch=="":
-                ch=x
+            if ch == "":
+                ch = x
             else:
-                ch =ch + "\n" + x
+                ch = ch + "\n" + x
         return ch
     else:
         return str(liste)
 
-def stringToList(liste,liste_separator=""):
-    typ=type(liste)
-    if typ==str:
-        if liste_separator=="":
+
+def stringToList(liste, liste_separator=""):
+    typ = type(liste)
+    if typ == str:
+        if liste_separator == "":
             list1 = []
             list1[:0] = liste
             return list1

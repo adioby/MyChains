@@ -16,11 +16,5 @@ nom_fic = "fred3.txt"
 # print(ch)
 
 # Python code to convert string to list character-wise
-def Convert(string):
-    list1=[]
-    list1[:0]=string
-    return list1
-# Driver code
-str1="ADIOBY, alfred"
-ch=myChains(str1)
-print(ch.toList())
+str1="aDIOBY, alfred"
+print(str1.count("a"))

@@ -6,24 +6,24 @@ y = "=Nom\n=Prenoms\n=CodeUser\n=Matriculate\n=CAI\n=Sexe\n=Telephone\n=Email"
 f1 = "fred1.txt"
 f2 = "fred2.txt"
 nom_fic = "fred3.txt"
-f4 = "MyChains.py"
+f4 = "myChains.py"
 # print(valide_file(f4))
 
-# print(MyChains("MyChains.py").valeur().lower())
+# print(myChains("myChains.py").valeur().lower())
 ch = myChains(x, y)
 # print("************************************************")
 #
-# ch=MyChains(f1,f2)
+# ch=myChains(f1,f2)
 # print((ch.value().upper()))
 # print(len(ch))
 
-# MyChains(f1," = ").add()
+# myChains(f1," = ").add()
 
 
 # print(ch.valeur(4))
 
 #
-# ch = MyChains(x, y)
+# ch = myChains(x, y)
 # print(ch)
 # ch.generer_fichier(nom_fic)
 # x1=ch.valeur(5)

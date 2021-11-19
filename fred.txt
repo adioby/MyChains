@@ -1,6 +1,21 @@
+aaa
+aaajkrze
+
+er
+
+zetzer
+(lll)
+
 def listInString(
     str_List   ,
+
+
+
+
     chaine   ,
     andCondition=False   ,
     caseSensitive=False
+
+
+
 ):

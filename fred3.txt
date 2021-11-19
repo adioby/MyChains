@@ -1,34 +1,78 @@
-def Descendre_Code(Chaine_Code, Caractere_Separation):
+For i = 0 To List1.ListCount - 1
+        'Ligne_Fic = List1.List(i)
+        Debut_Selection = False
+        Fin_Selection = False
 
-ch = Chaine_Code
-x0 = Caractere_Separation
-if InStr(1, ch, x0) = 0 :
-    Descendre_Code = ch
-    
+        If (List1.Selected(i)) Or Tout Then
+            'Verifier si on est au debut d'un block sur la ligne courante
+            X = Trouver_Car_Debut_Block(List1.List(i))
+            If X = "" Then
+                List19.AddItem List1.List(i)
+                GoTo Ignorer
+            End If
 
-T = Split(ch, x0)
-n = UBound(T)
+            Debut_Selection = True
+            Block_Selectionne = ""
 
-ch = ""
+            'Trouver le block_Selectionne
+            k = i
+            List20.Clear
+            X1 = ""
+            Fin_Premier_Block = False
 
-For i = 0 To n
-    X = Trim(T(i))
-    if i < n :
-        if i = 0 :
-            ch = Descendre_Ouverture_Fermeture(X) + " " + x0 + "\n"
-        else:
-            'verifier si le dernier caractere est identique au separateur si oui pas de retour a la ligne
-            if (i = n - 1) And (Right(Chaine_Code, Len(Caractere_Separation)) = Caractere_Separation) :
-                ch = ch + X + " " + x0
-            else:
-                ch = ch + X + " " + x0 + "\n"
-            
-        
-    else:
-        if X <> "" :
-            ch = ch + " " + Descendre_Ouverture_Fermeture(X)
-        
-    
+            Do While (k <= List1.ListCount - 1) And ((List1.Selected(k)) Or Tout)
+                Block_Selectionne = Block_Selectionne & List1.List(k)
+                List20.AddItem List1.List(k)
 
-return ch
+                'Verifier si on a attein la fin d'un block contigu
+                If X1 = "" Then
+                    X1 = Trouver_Car_Debut_Block(Block_Selectionne)
+                    If X1 <> "" Then
+                        If Block_Complet(Block_Selectionne, X1) Then
+                            Fin_Premier_Block = True
+                            GoTo Sortir
+                        End If
+                    End If
+                Else
+                    If Block_Complet(Block_Selectionne, X1) Then
+                        Fin_Premier_Block = True
+                        GoTo Sortir
+                    End If
+                End If
 
+                k = k + 1
+                If Not (k <= List1.ListCount - 1) Then
+                    GoTo Sortir
+                End If
+            Loop
+Sortir:
+
+            If Not Tout Then
+                If k <= (List1.ListCount - 1) Then
+                    Fin_Selection = (List1.Selected(k) = False)
+                End If
+
+                If Fin_Selection And (Not Fin_Premier_Block) Then
+                    k = k - 1
+                End If
+            End If
+
+            If Block_Remontable(Block_Selectionne) Then
+                List19.AddItem Remonter_Block(Block_Selectionne, Car_Remontee)
+            Else
+                For Q = 0 To List20.ListCount - 1
+                    List19.AddItem List20.List(Q)
+                Next Q
+            End If
+
+            X1 = ""
+            i = k
+
+        Else
+            List19.AddItem List1.List(i)
+        End If
+
+'Cas des lignes non traitées
+Ignorer:
+
+Next i

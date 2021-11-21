@@ -3,11 +3,12 @@ aaajkrze
 
 er
 
-zetzer
-(lll)
+zetzer(lll
 
-def listInString(
-    str_List   ,
+
+)
+
+def listInString(    str_List   ,
 
 
 
